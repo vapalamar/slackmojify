@@ -1,7 +1,7 @@
 import { Get, Controller, Post, UseInterceptors, FileInterceptor, UploadedFile, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { AppService } from './app.service';
 import { FacedetectorService } from './facedetector/facedetector.service';
-import { Response } from 'express';
 
 @Controller()
 export class AppController {
@@ -17,7 +17,7 @@ export class AppController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  async detect(@Res() res: Response, @UploadedFile() file: any): Promise<any> {
+  async detect(@Res() res: Response, @UploadedFile() file: IFile): Promise<Response> {
     const face = await this.facedetector.detect(file.buffer, file.mimetype);
     res.set('Content-Type', file.mimetype);
     return res.send(face);
